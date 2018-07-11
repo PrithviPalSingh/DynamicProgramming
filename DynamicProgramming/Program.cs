@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Configuration;
 
 namespace DynamicProgramming
 {
@@ -16,8 +17,13 @@ namespace DynamicProgramming
             //int[] intArray = { 858, 710 };
             //Console.WriteLine(new EqualDistribution().MinRound(intArray));
 
-            int[] coins = { 2, 5, 3, 6 };
-            Console.WriteLine(new CoinChange().GetWays(coins, 10));
+            //int[] coins = { 2, 5, 3, 6 };
+            //Console.WriteLine(new CoinChange().GetWays(coins, 10));
+            //Console.Read();
+
+            int[] numbers = Array.ConvertAll(ConfigurationManager.AppSettings["Value"].Split(' '), arrtemp => Convert.ToInt32(arrtemp));
+            Console.WriteLine(new MaximumSumArray().MaxSubsetSumWithRecursion(numbers));
+            Console.WriteLine(new MaximumSumArray().MaxSubsetSum(numbers));
             Console.Read();
         }
     }
