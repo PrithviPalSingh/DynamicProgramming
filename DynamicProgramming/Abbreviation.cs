@@ -137,186 +137,54 @@ namespace DynamicProgramming
             return str1 == b ? "YES" : "NO";
         }
 
-        public static string abbreviation(string a, string b)
+        static public int lcs(char[] X, char[] Y, int m, int n)
         {
-            Queue<char> memo = new Queue<char>();
-            return abs(a, b, memo) ? "YES" : "NO";
+            int[][] L = new int[m + 1][];
+            int i, j;
+
+            /* Following steps build L[m+1][n+1] in bottom up fashion. Note 
+               that L[i][j] contains length of LCS of X[0..i-1] and Y[0..j-1] */
+            for (i = 0; i <= m; i++)
+            {
+                L[i] = new int[n + 1];
+                for (j = 0; j <= n; j++)
+                {
+                    if (i == 0 || j == 0)
+                        L[i][j] = 0;
+
+                    //else if (X[i - 1].ToString() == Y[j - 1].ToString().ToUpper())
+                    else if (IsUpperCase(Y[j - 1]) && X[i - 1] == Y[j - 1])
+                    {
+                        L[i][j] = L[i - 1][j - 1] + 1;
+                    }
+                    else if (!IsUpperCase(Y[j - 1]) && X[i - 1].ToString() == Y[j - 1].ToString().ToUpper())
+                    {
+                        if (L[i][j - 1] > L[i - 1][j - 1])
+                            L[i][j] = L[i][j - 1];
+                        else
+                            L[i][j] = L[i - 1][j - 1] + 1;
+                    }
+                    else if (IsUpperCase(Y[j - 1]) && X[i - 1] != Y[j - 1])
+                    {
+                        if (L[i - 1][j] > 0)
+                            L[i][j] = L[i - 1][j];
+                        else
+                            L[i][j] = 0;
+                    }
+
+                    else
+                        L[i][j] = max(L[i - 1][j], L[i][j - 1]);
+                }
+            }
+
+            /* L[m][n] contains length of LCS for X[0..n-1] and Y[0..m-1] */
+            return L[m][n];
         }
 
-        //private static bool abs1(string a, string b, Queue<char> memo)
-        //{
-        //    int aMaxIndex = a.Length - 1;
-        //    int bMaxIndex = b.Length - 1;
-
-        //    if (string.IsNullOrWhiteSpace(a) && string.IsNullOrWhiteSpace(b))
-        //        return true;
-
-        //    if (!string.IsNullOrWhiteSpace(b) && string.IsNullOrWhiteSpace(a))
-        //        return false;
-
-        //    if (string.IsNullOrWhiteSpace(b) && !string.IsNullOrWhiteSpace(a))
-        //    {
-        //        var pop = memo.Count > 0 ? memo.Dequeue() : ' ';
-        //        if (IsLowerCase(a[aMaxIndex]))
-        //        {
-        //            if (pop == a[aMaxIndex])
-        //            {
-        //                memo.Enqueue(a[aMaxIndex]);
-        //            }
-
-        //            //memo.Push(pop);
-        //            return abs(a.Substring(0, aMaxIndex), b, memo);
-        //        }
-        //        else
-        //        {
-        //            // If a[maxIndex] matches keyValue
-        //            if (pop.ToString() == a[aMaxIndex].ToString().ToLower())
-        //            {
-        //                return abs(a.Substring(0, aMaxIndex), b, memo);
-        //            }
-
-        //            return false;
-        //        }
-        //    }
-
-        //    if (b[bMaxIndex] == a[aMaxIndex])
-        //    {
-        //        return abs(a.Substring(0, aMaxIndex), b.Substring(0, bMaxIndex), memo);
-        //    }
-
-        //    if (b[bMaxIndex].ToString() == a[aMaxIndex].ToString().ToUpper())
-        //    {
-        //        memo.Enqueue(a[aMaxIndex]);
-        //        return abs(a.Substring(0, aMaxIndex), b.Substring(0, bMaxIndex), memo);
-        //    }
-
-        //    if (b[bMaxIndex] != a[aMaxIndex])
-        //    {
-        //        var pop = memo.Count > 0 ? memo.Dequeue() : ' ';
-        //        if (IsLowerCase(a[aMaxIndex]))
-        //        {
-        //            //if (pop == a[aMaxIndex])
-        //            //{                        
-        //            //    memo.Enqueue(a[aMaxIndex]);                        
-        //            //}
-
-        //            memo.Enqueue(a[aMaxIndex]);
-        //            //memo.Push(pop);
-        //            return abs(a.Substring(0, aMaxIndex), b, memo);
-        //        }
-        //        else
-        //        {
-        //            // If a[maxIndex] matches keyValue
-        //            if (pop.ToString() == a[aMaxIndex].ToString().ToLower())
-        //            {
-        //                return abs(a.Substring(0, aMaxIndex), b, memo);
-        //            }
-
-        //            return false;
-        //        }
-        //    }
-
-        //    return false;
-
-        //}
-
-        private static bool abs(string a, string b, Queue<char> memo)
+        /* Utility function to get max of 2 integers */
+        static int max(int a, int b)
         {
-            int aMaxIndex = a.Length - 1;
-            int bMaxIndex = b.Length - 1;
-
-            #region Base-cases
-            //both empty
-            if (string.IsNullOrWhiteSpace(a) && string.IsNullOrWhiteSpace(b))
-                return true;
-
-            //a is empty but b have items
-            if (string.IsNullOrWhiteSpace(a) && !string.IsNullOrWhiteSpace(b))
-                return false;
-            #endregion
-
-            #region Need to re-visit -- special case 1
-            //b is empty and a is non-empty
-            if (string.IsNullOrWhiteSpace(b) && !string.IsNullOrWhiteSpace(a))
-            {
-                if (!IsLowerCase(a[aMaxIndex]))
-                {
-                    if (memo.Count == 0)
-                        return false;
-
-                    while (memo.Count > 0)
-                    {
-                        var deq = memo.Dequeue();
-
-                        if (deq.ToString().ToUpper() == a[aMaxIndex].ToString().ToUpper())
-                            break;
-                    }
-                }
-
-                return abs(a.Substring(0, aMaxIndex), b, memo); ;
-            }
-            #endregion
-
-            // Both same and upper case
-            if (a[aMaxIndex] == b[bMaxIndex])
-            {
-                //var foundinmemo = false;
-                //while (memo.Count > 0)
-                //{
-                //    var deq = memo.Dequeue();
-
-                //    if (deq.ToString().ToUpper() == a[aMaxIndex].ToString().ToUpper())
-                //    {
-                //        foundinmemo = true;
-                //        break;
-                //    }
-                //}
-
-                //if (foundinmemo)
-                //{
-                //    return abs(a.Substring(0, aMaxIndex), b, memo);
-
-                //}
-                //else
-                { return abs(a.Substring(0, aMaxIndex), b.Substring(0, bMaxIndex), memo); }
-            }
-
-            #region - special case 2
-            //both upper case and different - special case
-            if (IsUpperCase(a[aMaxIndex]) && a[aMaxIndex] != b[bMaxIndex])
-            {
-                if (memo.Count == 0)
-                    return false;
-
-                while (memo.Count > 0)
-                {
-                    var deq = memo.Dequeue();
-
-                    if (deq.ToString().ToUpper() == a[aMaxIndex].ToString().ToUpper())
-                        break;
-                }
-
-                return abs(a.Substring(0, aMaxIndex), b, memo);
-            }
-            #endregion
-
-            //a lower case and not equal to b
-            if (IsLowerCase(a[aMaxIndex]) && a[aMaxIndex].ToString().ToUpper() != b[bMaxIndex].ToString())
-            {
-                return abs(a.Substring(0, aMaxIndex), b, memo);
-            }
-
-            #region - special case 3
-            //a lower case and equal to b
-            if (IsLowerCase(a[aMaxIndex]) && a[aMaxIndex].ToString().ToUpper() == b[bMaxIndex].ToString())
-            {
-                //Memorize this
-                memo.Enqueue(a[aMaxIndex]);
-                return abs(a.Substring(0, aMaxIndex), b.Substring(0, bMaxIndex), memo);
-            }
-            #endregion
-
-            return false;
+            return (a > b) ? a : b;
         }
 
         private static bool IsLowerCase(char c)

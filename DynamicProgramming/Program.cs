@@ -100,15 +100,35 @@ namespace DynamicProgramming
             //            }
             #endregion
 
-            char[] X = "WEWOUCUIDGCGTRMEZEPXZFEJWISRSBBSYXAYDFEJJDLEBVHHKS".ToCharArray();
-            char[] Y = "FDAGCXGKCTKWNECHMRXZWMLRYUCOCZHJRRJBOAJOQJZZVUYXIC".ToCharArray();
+            //char[] X = "WEWOUCUIDGCGTRMEZEPXZFEJWISRSBBSYXAYDFEJJDLEBVHHKS".ToCharArray();
+            //char[] Y = "FDAGCXGKCTKWNECHMRXZWMLRYUCOCZHJRRJBOAJOQJZZVUYXIC".ToCharArray();
 
-            int m = X.Length;
-            int n = Y.Length;
-            Console.WriteLine(DateTime.Now);
-            Console.WriteLine($"Length of LCS is {LongestCommonSubSequence.lcs(X, Y, m, n)}");
-            Console.WriteLine(DateTime.Now);
+            //int m = X.Length;
+            //int n = Y.Length;
+            //Console.WriteLine(DateTime.Now);
+            //Console.WriteLine($"Length of LCS is {LongestCommonSubSequence.lcs(X, Y, m, n)}");
+            //Console.WriteLine(DateTime.Now);
 
+            //int[] x = { 1, 2, 3, 4, 1 };
+            //int[] y = { 3, 4, 1, 2, 1, 3 };
+
+            //Console.WriteLine(DateTime.Now);
+            //Console.WriteLine($"Length of LCS is {string.Join(" ", LongestCommonSubSequence.lcsint(x, y))}");
+            //Console.WriteLine(DateTime.Now);
+
+
+            char[] X = "daBcd".ToCharArray();
+            char[] Y = "ABC".ToCharArray();
+            var num = LongestCommonSubSequence.lcs(Y, X, Y.Length, X.Length);
+
+            if (Y.Length <= num)
+            {
+                Console.WriteLine("Yes");
+            }
+            else
+            {
+                Console.WriteLine("No");
+            }
             Console.Read();
         }
     }
