@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abbreviation.cs" />
+    <Compile Include="Candies.cs" />
     <Compile Include="CoinChange.cs" />
     <Compile Include="EqualDistribution.cs" />
     <Compile Include="LongestCommonSubSequence.cs" />
